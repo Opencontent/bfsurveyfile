@@ -3,5 +3,6 @@
 [ModuleSettings]
 ExtensionRepositories[]=bfsurveyfile
 ModuleList[]=survey
+ModuleList[]=surveyfile
 
 */ ?>

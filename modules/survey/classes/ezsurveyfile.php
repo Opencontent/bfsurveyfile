@@ -118,7 +118,6 @@ class eZSurveyFile extends eZSurveyQuestion
 
         $prefix = eZSurveyType::PREFIX_ATTRIBUTE;
         $surveyAnswer = false;
-        $fileUploadAttempt = false;
 
         $postSurveyAnswer = $prefix . '_ezsurvey_answer_' . $this->ID . '_' . $this->contentObjectAttributeID();
         $postSurveyFile = $prefix . '_ezsurvey_file_' . $this->ID . '_' . $this->contentObjectAttributeID();
@@ -136,14 +135,16 @@ class eZSurveyFile extends eZSurveyQuestion
         //Option 2)
         if (array_key_exists($postSurveyFile, $_FILES) && !empty( $_FILES[$postSurveyFile] )) {
 
-            $fileUploadAttempt = true;
-
             $uploader = new eZSurveyFileUploader($postSurveyFile, $this->allowedExtensions, $this->sizeLimit);
             $uploaderResult = $uploader->handleUpload($this->uploadPath);
             if (array_key_exists('info', $uploaderResult)) {
                 $fileName = $uploaderResult['info']['basename'];
-                $fileLabel = $uploaderResult['label'];  //normal or unique name
                 $filePath = $this->uploadPath . $fileName;
+
+                // clusterize
+                $mimeData = eZMimeType::findByFileContents( $filePath );
+                $fileHandler = eZClusterFileHandler::instance();
+                $fileHandler->fileStore( $filePath, 'surveyfile', false, $mimeData['name'] );
 
                 $surveyAnswer = $filePath;
                 $this->setAnswer($surveyAnswer); //answer for Survey->questionList compile pre storeResult()
@@ -176,7 +177,6 @@ class eZSurveyFile extends eZSurveyQuestion
     //This is called during the processViewActions chain and storeResult();    
     function answer()
     {
-
         //option 1) check for already defined
         if (strlen($this->Answer)) {
             return $this->Answer;

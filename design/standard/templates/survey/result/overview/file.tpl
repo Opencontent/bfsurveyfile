@@ -13,7 +13,7 @@
                                                         'limit', $te_limit ))}
   {* loop over files and render as links *}
   {section var=result loop=$results}
-    <li><a href="{concat('/',$result.value)}" target="file">{$result.value}</a></li>
+    <li><a href="{concat('/surveyfile/download/',$question.survey_id,'/',$result.value|explode('/')|implode(':'))}" target="file">{$result.value}</a></li>
   {/section}
   {/let}
   </ul>
