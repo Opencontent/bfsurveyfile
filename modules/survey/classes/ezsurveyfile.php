@@ -33,7 +33,7 @@ class eZSurveyFile extends eZSurveyQuestion
     /*
      * constructor
      */
-    function eZSurveyFile($row = false)
+    function __construct($row = false)
     {
         $bfsf_ini = eZINI::instance('bfsurveyfile.ini');
         $varPath = eZSys::storageDirectory();
@@ -72,7 +72,7 @@ class eZSurveyFile extends eZSurveyQuestion
         if (!isset( $row['mandatory'] )) {
             $row['mandatory'] = 0;
         }
-        $this->eZSurveyQuestion($row);
+        parent::__construct($row);
     }
 
     /*
