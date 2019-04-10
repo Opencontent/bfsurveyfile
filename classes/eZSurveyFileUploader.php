@@ -43,16 +43,14 @@ class eZSurveyFileUploader
         $phpUploadMaxSize = $this->toBytes(ini_get('upload_max_filesize'));
         $surveyMaxFileSize = $this->toBytes($this->sizeLimit);
         if ($phpPostMaxSize < $surveyMaxFileSize || $phpUploadMaxSize < $surveyMaxFileSize) {
-            echo 'PHP post_max_size = ' . $phpPostMaxSize;
-            echo 'PHP upload_max_filesize = ' . $phpUploadMaxSize;
-            echo 'Survey MaxFileSize = ' . $surveyMaxFileSize;
-            die( "{'error':'increase post_max_size and upload_max_filesize to $surveyMaxFileSize'}" );
+            eZDebug::writeError( "Increase post_max_size ({$phpPostMaxSize}) and upload_max_filesize ({$phpUploadMaxSize}) to $surveyMaxFileSize'}", __METHOD__ );
+            $this->sizeLimit = $phpUploadMaxSize;
         }
     }
 
     private function toBytes($str)
     {
-        $val = trim($str);
+        $val = (int)$str;
         $last = strtolower($str[strlen($str) - 1]);
         switch ($last) {
             case 'g':
