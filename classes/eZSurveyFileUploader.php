@@ -89,6 +89,10 @@ class eZSurveyFileUploader
 
         $pathinfo = pathinfo($this->file->getName());
         $filename = $pathinfo['filename'];
+
+        $filename = eZCharTransform::instance()->transformByGroup($filename, 'identifier');
+        $filename = $this->file->getHash() . $filename;
+
         $filelabel = $pathinfo['basename']; //keep un, uniqued name
         $fileize = $this->file->getSize();
         //$filename = md5(uniqid());
@@ -151,6 +155,11 @@ class eZSurveyUploadPostFile
         return $_FILES[$this->httpVar]['size'];
     }
 
+    function getHash()
+    {
+        return md5_file($_FILES[$this->httpVar]['tmp_name']);
+    }
+
 }
 
 class eZSurveyUploadGetFile
@@ -200,5 +209,10 @@ class eZSurveyUploadGetFile
         } else {
             throw new Exception('Getting content length is not supported.');
         }
+    }
+
+    function getHash()
+    {
+        return '';
     }
 }
