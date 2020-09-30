@@ -97,6 +97,7 @@ class eZSurveyFileUploader
         $fileize = $this->file->getSize();
         //$filename = md5(uniqid());
         $ext = $pathinfo['extension'];
+        $pathinfo['basename'] = $filename . '.' . $ext; //rebuild pathinfo
 
         if ($this->allowedExtensions && !in_array(strtolower($ext), $this->allowedExtensions)) {
             $these = implode(', ', $this->allowedExtensions);
