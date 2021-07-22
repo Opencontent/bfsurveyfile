@@ -1,2 +1,2 @@
 {$question.question_number}. {$question.text}
-{ezurl(no,full)}/{$question.answer}
+{concat('/surveyfile/download/',$question.survey_id,'/',$question.answer|explode('/')|implode(':'))|ezurl(no, full)}
